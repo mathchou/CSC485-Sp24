@@ -2,28 +2,25 @@ Hi Class, I'd like to get to know you a bit more, so here's a info sheet I'd lik
 
 ---
 
-**Name:** Michael Chou
+**Name:** Spendylove Apaloo
 
-**Pronouns:** He/Him
+**Pronouns:** She/Her
 
-**Class Year:** 2011
+**Class Year:** 2024
 
-**Major(s)/Minor(s):** Mathematics
+**Major(s)/Minor(s):** Economics(Major). Data Science(Minor)
 
 **Interests:** 
 
-  1. Number Theory
+  1. Travel
   2. Data Science
   3. Social Justice Issues
-  4. Board Games
-  5. Video Games
-  6. Science Fiction
-  7. Chess
-  
+  4. Culture
+  5. Food
 
-**Birthday:** Dec 12th
+**Birthday:** May 2nd
 
-**Something you could talk about for hours:** Philosophy and other random useless things
+**Something you could talk about for hours:** random useless things
 
 **What would you like others to know about you?:** Please communicate with me! Don't be afraid to reach out and ask questions. It's the only way to learn. I can be demanding but I am also flexible if you need extra time to finish projects.
 
