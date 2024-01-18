@@ -1,3 +1,0 @@
-blahlablablahlhalblhlabhlah
-
-this is a test text file for git learning purposes
