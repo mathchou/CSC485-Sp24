@@ -28,3 +28,30 @@ Hi Class, I'd like to get to know you a bit more, so here's a info sheet I'd lik
 **What would you like others to know about you?:** Please communicate with me! Don't be afraid to reach out and ask questions. It's the only way to learn. I can be demanding but I am also flexible if you need extra time to finish projects.
 
 ---
+
+
+
+**Name:** Colin Fitzgibbons
+
+**Pronouns:** He/Him
+
+**Class Year:** 2024
+
+**Major(s)/Minor(s):** Computer Science/Data Science
+
+**Interests:** 
+
+  1. Coding
+  2. Data Science
+  3. Sports 
+  4. Trying new things
+  5. Video Games
+  6. Travelling
+  
+
+**Birthday:** Jan 31
+
+**Something you could talk about for hours:** Sports, some social justice, some politics, computer science/cybersecurity.
+
+**What would you like others to know about you?:** Sometimes I can be late, but I can still get things done well. 
+---
