@@ -1,5 +1,6 @@
 Hi, Class. I want to get to know you better, so here's an info sheet I'd like you to complete. Put your answers below! This will serve as an example of merging multiple versions of files using Git.
 
+
 ---
 
 **Name:** Michael Chou
@@ -28,26 +29,24 @@ Hi, Class. I want to get to know you better, so here's an info sheet I'd like yo
 
 ---
 
-**Name:** Dax Chou
 
-**Pronouns:** He/Him
+**Name:** Spendylove Apaloo
 
-**Class Year:** 
+**Pronouns:** She/Her
 
-**Major(s)/Minor(s):** Mathematics/Number blocks in particular
+**Class Year:** 2024
+
+**Major(s)/Minor(s):** Economics(Major). Data Science(Minor)
 
 **Interests:** 
 
-  1. Number blocks
-  2. Dinosaurs
-  3. Yelling at Dad
-  
+  1. Travel
+  2. Data Science
+  3. Social Justice Issues
+  4. Culture
+  5. Food
 
-**Birthday:** Nov 23rd
-
-**Something you could talk about for hours:** Philosophy and other random useless things
-
-**What would you like others to know about you?:** I am the most cute child you'll ever see.
+**Birthday:** May 2nd
 
 ---
 
