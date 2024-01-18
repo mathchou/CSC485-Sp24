@@ -2,6 +2,25 @@ Hi, Class. I want to get to know you better, so here's an info sheet I'd like yo
 
 ---
 
+**Name:** Michael Chou
+**Pronouns:** He/Him
+**Class Year:** 2011
+**Major(s)/Minor(s):** Mathematics
+**Interests:** 
+  1. Number Theory
+  2. Data Science
+  3. Social Justice Issues
+  4. Board Games
+  5. Video Games
+  6. Science Fiction
+  7. Chess
+  
+**Birthday:** Dec 12th
+**Something you could talk about for hours:** Philosophy and other random useless things
+**What would you like others to know about you?:** Please communicate with me! Don't be afraid to reach out and ask questions. It's the only way to learn. I can be demanding but I am also flexible if you need extra time to finish projects.
+
+---
+
 **Name:** Emily Gelchie
 
 **Pronouns:** She/Her
