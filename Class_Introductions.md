@@ -1,5 +1,6 @@
 Hi, Class. I want to get to know you better, so here's an info sheet I'd like you to complete. Put your answers below! This will serve as an example of merging multiple versions of files using Git.
 
+
 ---
 
 **Name:** Michael Chou
@@ -28,26 +29,24 @@ Hi, Class. I want to get to know you better, so here's an info sheet I'd like yo
 
 ---
 
-**Name:** Dax Chou
 
-**Pronouns:** He/Him
+**Name:** Spendylove Apaloo
 
-**Class Year:** 
+**Pronouns:** She/Her
 
-**Major(s)/Minor(s):** Mathematics/Number blocks in particular
+**Class Year:** 2024
+
+**Major(s)/Minor(s):** Economics(Major). Data Science(Minor)
 
 **Interests:** 
 
-  1. Number blocks
-  2. Dinosaurs
-  3. Yelling at Dad
-  
+  1. Travel
+  2. Data Science
+  3. Social Justice Issues
+  4. Culture
+  5. Food
 
-**Birthday:** Nov 23rd
-
-**Something you could talk about for hours:** Philosophy and other random useless things
-
-**What would you like others to know about you?:** I am the most cute child you'll ever see.
+**Birthday:** May 2nd
 
 ---
 
@@ -78,6 +77,21 @@ Hi, Class. I want to get to know you better, so here's an info sheet I'd like yo
 
 ---
 
+**Name:** Patrick Thygesen
+**Pronouns:** He/Him
+**Class Year:** 2024
+**Major(s)/Minor(s):** Mathematics and Quantitative Economics / Data Science
+**Interests:** 
+  1. Running / Track and Field
+  2. Manchester United / Soccer in general
+  3. TV Shows
+  
+**Birthday:** January 7th
+**Something you could talk about for hours:** English Football and some TV shows (Breaking Bad, Yellowstone and more)
+**What would you like others to know about you?:** I am from Australia and are at PC on the track team. I am graduating this year but going to do another year at PC doing either an MBA or MSBA.
+
+---
+
  
 **Name:** Colin Fitzgibbons
 
@@ -102,4 +116,6 @@ Hi, Class. I want to get to know you better, so here's an info sheet I'd like yo
 **Something you could talk about for hours:** Sports, some social justice, some politics, computer science/cybersecurity.
 
 **What would you like others to know about you?:** Sometimes I can be late, but I can still get things done well. 
+
 ---
+
