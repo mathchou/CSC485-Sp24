@@ -17,10 +17,10 @@ Hi Class, I'd like to get to know you a bit more, so here's a info sheet I'd lik
   3. Some video games
   
 
-**Birthday:** Feb 25th
+**Birthday:** February 25th
 
 **Something you could talk about for hours:** MLB and NFL history
 
-**What would you like others to know about you?:** I am looking into a career in sports statistics. Once I graduate, I want to get into mountain biking.
+**What would you like others to know about you?:** I am currently looking into a career in sports statistics. Once I graduate, I want to get into mountain biking.
 
 ---
