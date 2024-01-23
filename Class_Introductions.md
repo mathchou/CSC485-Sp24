@@ -3,7 +3,7 @@ Hi, Class. I want to get to know you better, so here's an info sheet I'd like yo
 
 ---
 
-**Name:** Michael Chou
+**Name:** Mike Chow
 
 **Pronouns:** He/Him
 
@@ -13,11 +13,11 @@ Hi, Class. I want to get to know you better, so here's an info sheet I'd like yo
 
 **Interests:** 
 
-  1. Number Theory
-  2. Data Science
-  3. Social Justice Issues
-  4. Board Games
-  5. Video Games
+  1. Video Games
+  2. Number Theory
+  3. Data Science
+  4. Social Justice Issues
+  5. Board Games
   6. Science Fiction
   7. Chess
   
