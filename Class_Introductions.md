@@ -7,11 +7,13 @@ Hi, Class. I want to get to know you better, so here's an info sheet I'd like yo
 
 **Pronouns:** He/Him
 
-**Class Year:** 2011
+**Class Year:** 2024
 
 **Major(s)/Minor(s):** Mathematics
 
 **Interests:** 
+
+**Birthday:** February 25th
 
   1. Video Games
   2. Number Theory
@@ -23,9 +25,9 @@ Hi, Class. I want to get to know you better, so here's an info sheet I'd like yo
   
 **Birthday:** Dec 12th
 
-**Something you could talk about for hours:** Philosophy and other random useless things
+**Something you could talk about for hours:** Philosophy and other useless things
 
-**What would you like others to know about you?:** Please communicate with me! Don't be afraid to reach out and ask questions. It's the only way to learn. I can be demanding but I am also flexible if you need extra time to finish projects.
+**What would you like others to know about you?:** Please don't be afraid to ask questions!
 
 ---
 
@@ -124,3 +126,26 @@ Hi, Class. I want to get to know you better, so here's an info sheet I'd like yo
 **What would you like others to know about you?:** Sometimes I can be late, but I can still get things done well. 
 
 ---
+
+
+**Name:** John Incantalupo
+
+**Interests:** 
+
+  1. Sports statistics
+  2. Chess
+  3. Some video games
+  
+  
+**Interests:** 
+
+  1. Sports statistics
+  2. Chess
+  3. Some video games
+  
+
+**Birthday:** February 25th
+
+**Something you could talk about for hours:** MLB and NFL history
+
+**What would you like others to know about you?:** I am currently looking into a career in sports statistics. Once I graduate, I want to get into mountain biking.
