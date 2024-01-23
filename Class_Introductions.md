@@ -29,7 +29,6 @@ Hi, Class. I want to get to know you better, so here's an info sheet I'd like yo
 
 ---
 
-
 **Name:** Spendylove Apaloo
 
 **Pronouns:** She/Her
@@ -78,16 +77,23 @@ Hi, Class. I want to get to know you better, so here's an info sheet I'd like yo
 ---
 
 **Name:** Patrick Thygesen
+
 **Pronouns:** He/Him
+
 **Class Year:** 2024
+
 **Major(s)/Minor(s):** Mathematics and Quantitative Economics / Data Science
+
 **Interests:** 
+
   1. Running / Track and Field
   2. Manchester United / Soccer in general
   3. TV Shows
   
 **Birthday:** January 7th
+
 **Something you could talk about for hours:** English Football and some TV shows (Breaking Bad, Yellowstone and more)
+
 **What would you like others to know about you?:** I am from Australia and are at PC on the track team. I am graduating this year but going to do another year at PC doing either an MBA or MSBA.
 
 ---
@@ -118,4 +124,3 @@ Hi, Class. I want to get to know you better, so here's an info sheet I'd like yo
 **What would you like others to know about you?:** Sometimes I can be late, but I can still get things done well. 
 
 ---
-
