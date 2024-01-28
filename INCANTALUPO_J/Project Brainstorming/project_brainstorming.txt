@@ -1,0 +1,23 @@
+John Incantalupo
+Data Science Capstone
+1/27/24
+Project Brainstorming
+
+
+Idea #1: Analyzing Student Test Scores in all 50 States
+
+One idea that I had for a project for this course was to analyze high school students' test scores from across the United States and compare various demographics. Even though we have seen a massive shift in recent years with many colleges becoming test-optional institutions, an analysis of student SAT scores can give us an idea of how different variables can have an effect on the student's education. I was able to find an in-depth dataset that contains data on SAT scores from each state in every year from 2005 to 2015. This dataset also provides average test scores for students based on their family's listed income.
+
+In terms of techniques, I plan to first use exploratory data analysis to look for any trends in the data. I also plan to add new variables to the dataset, as the data for average SAT scores is only provided for specific income brackets. I will use the average scores for each bracket, as well as the number of test takers in each bracket, to find the total average SAT scores for each state. Since the data is also divided by year as well as state, I would also like to run a time series analysis on the data and see if there are any patterns among the states. A cluster analysis can also be done to see if there are any similarities between the different states or the different years.
+
+In terms of the timeline, this would be a relatively short project, considering that the techniques can be performed in R. However, I feel that as I dive deeper into this project, I may find myself asking more questions that can only be solved by further analysis. And if needed, additional data on public school districts across the country would be a helpful supplemental dataset.
+
+
+
+Idea #2: A WAR-like Metric for NFL Football
+
+In baseball, WAR, or wins above replacement, is a metric used to describe a player's all-encompassing value to the team, which measures the number of wins that the team won because they had that player on their team as opposed to any replacement-level player. Due to the positional variability in football, a similar metric to WAR would be near-impossible. I have thought about exploring a metric only for the offensive skill positions of quarterback, running back, wide receiver, and tight end. To do this, I have a play-by-play dataset that contains data on every play that was run during the 2023 regular season.
+
+By using exploratory data analysis, I can determine how the dataset distinguishes different types of offensive plays and the players involved in that specific play. I will then isolate these important variables into a much cleaner dataset. From there, I will test various regression models with the aim of finding a model that measures a player's offensive contributions to his team. Once again, I expect to complete most of the work for this project in R.
+
+This would be a much lengthier project, as the dataset that I will be working with features more variables, and the scope of the project is much more ambitious. Although I mentioned above that this dataset only features data from the 2023 season, I would like to incorporate data from past seasons later down the line to further test the validity of the best-fit model that I find.
