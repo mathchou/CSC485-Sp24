@@ -1,0 +1,13 @@
+For my first project, I would like to use the HR Analytics Dataset.
+
+1. 
+a) In this dataset, there are various roles that may be linked to different departments.  With this in mind, I would run a Clsuter Analysis of the different roles within the company to identify which job roles share similar characteristics.  With this information, I would hope to run various models for similar roles.  For example, I would expect that fators that effect sales would be different to factors that a Lab Technician.
+
+b) After this, I would try to find an optimal regression model to establish which fators impact job satisfaction (or salary potentially) the most.  I would use principal component analysis to best help decide which variables to use.
+
+2.
+The first step of the project would be to tidy up the dataset to make it.  Some variables are binary and would need to be changed to a pure binary variable.  Some of these variables include marital status, gender, atrition, and overtime. After running cluster analysis, I anticipate that several datasets will be taken from the raw data to allow more specific analysis of satisfaction. After this, I would normalize the numerical variables so that the intercept of the regression represents the satisfaction of the average employee. This would also help us determine which type of job roles are more satisfied.
+
+There a several variables that may be closely related, so before estimating any regression models I would run a principal component analysis to establish which variables should be included in the model. The goal of the regression models would represent a project that a HR team may conduct which would be to find which variables has the greatest impact on the job satisfaction of its employees, outside of salary hopefully. This may assist a company in keeping its employees as well as promoting efficiency of its workers if they are more satisfied.
+
+To test if the model is efficient, I would try to find a similar dataset that has similar information on its employees to see if the findings from this model is consistent in other companies with similar job roles and company structure. 
