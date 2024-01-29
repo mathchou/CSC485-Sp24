@@ -11,3 +11,7 @@ The first step of the project would be to tidy up the dataset to make it.  Some 
 There a several variables that may be closely related, so before estimating any regression models I would run a principal component analysis to establish which variables should be included in the model. The goal of the regression models would represent a project that a HR team may conduct which would be to find which variables has the greatest impact on the job satisfaction of its employees, outside of salary hopefully. This may assist a company in keeping its employees as well as promoting efficiency of its workers if they are more satisfied.
 
 To test if the model is efficient, I would try to find a similar dataset that has similar information on its employees to see if the findings from this model is consistent in other companies with similar job roles and company structure. 
+
+-Hi Pat,
+
+-This sounds like a great project, especially if you can find other similar data sets to compare it to. If not, it may be a little bit limited in scope, but would still be interesting.

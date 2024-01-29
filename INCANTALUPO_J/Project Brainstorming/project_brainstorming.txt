@@ -12,6 +12,10 @@ In terms of techniques, I plan to first use exploratory data analysis to look fo
 
 In terms of the timeline, this would be a relatively short project, considering that the techniques can be performed in R. However, I feel that as I dive deeper into this project, I may find myself asking more questions that can only be solved by further analysis. And if needed, additional data on public school districts across the country would be a helpful supplemental dataset.
 
+-Hi John,
+
+-Sounds like a great project idea. You might want to incorporate something like per-capita funding of public schools by state to see if states that spend more actually do get better test grades. You could also use something simpler, like a ranking database of education by state. 
+
 
 
 Idea #2: A WAR-like Metric for NFL Football
@@ -21,3 +25,5 @@ In baseball, WAR, or wins above replacement, is a metric used to describe a play
 By using exploratory data analysis, I can determine how the dataset distinguishes different types of offensive plays and the players involved in that specific play. I will then isolate these important variables into a much cleaner dataset. From there, I will test various regression models with the aim of finding a model that measures a player's offensive contributions to his team. Once again, I expect to complete most of the work for this project in R.
 
 This would be a much lengthier project, as the dataset that I will be working with features more variables, and the scope of the project is much more ambitious. Although I mentioned above that this dataset only features data from the 2023 season, I would like to incorporate data from past seasons later down the line to further test the validity of the best-fit model that I find.
+
+-This seems like a very interesting project. It does seem ambitious, but I am all for aiming high. I am curious to look into the data set with you to see what it looks like. 
