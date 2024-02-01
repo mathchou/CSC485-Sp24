@@ -1,0 +1,17 @@
+---
+## 1/30/2024
+
+Goals for this week:
+- [x] Brainstorming project
+- [ ] Search for other HR data sets with similar variables
+- [ ] Clean and format "Company" dataset
+
+### Last Week's Goals:
+
+- [x] Do exploratory data analysis
+- [x] Figure out how to pull request in Git
+- [x] upload slides from MTH320 project
+
+#### Reflections:
+This week I feel as if I was able to get a better grasp on how to ise Git. After completing the brainstorming Project, I can now start to format and search for other data sets. After Tuesday's class I believe that the early stage of this will involve a lot of searching for data and cleaning it early on. On Tuesday, I found another data set that has data on several variables similar to IBM HR dataset including termination dates.
+---
