@@ -2,14 +2,11 @@ Here is a sample weekly update/planner as a markdown (md) file. Markdown is a us
 
 ---
 
-## 1/8/2024
+## 1/23/2024
 
 Goals for this week:
 
-- [x] Write a template in markdown.
-- [x] Initialize a class github
-- [x] Create example jupyter notebook to go over day 1
-- [ ] World peace
+- [ ] Upload  
 - [ ] Sleep (from last week)
 - [ ] Plan classes for next week
 
