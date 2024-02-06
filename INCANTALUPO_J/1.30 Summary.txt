@@ -1,0 +1,4 @@
+John Incantalupo
+1/30 Summary
+
+In today's class, I determined that I will be working on the SAT scores project first. With a suggestion from Dr. Chou, I began searching for a supplementary dataset that contains yearly spending data for all 50 states with regards to education. I found a very in-depth dataset almost immediately from the School Finance Indicators Database, which contains over a hundred different variables that describe various spending aspects of each state, such as revenue and spending per pupil for various poverty groups, teacher salaries, and average income of public and private school families. I ended up spending most of class time looking through the PDF file provided that explains what each variable represents in order to gain a better understanding of the data. Next time, I plan to start playing with the data, and potentially joining the two datasets together.
