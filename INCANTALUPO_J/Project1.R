@@ -1,4 +1,5 @@
 library(tidyverse)
+library(plyr)
 
 #Feb 1
 school_scores <- read.csv("school_scores.csv")
@@ -38,6 +39,9 @@ school_scores %>%
 weighted.mean(school_scores$Total.Math, school_scores$Total.Test.takers) #511.286
 weighted.mean(school_scores$Total.Verbal, school_scores$Total.Test.takers) #500.7743
 
+SID %>%
+  mutate(Avg.Inc = (inc_pubsch * coverage) + (inc_nonpubsch * (1 - coverage)),
+         q1_pct = necm_enroll_q1 / necm_enroll_state) -> SID
 
 
 school_scores %>%
@@ -50,7 +54,7 @@ SID %>% filter(year >= 2007 & year <= 2015) -> SID07
 merge(school_scores, SID07,
       by.x = c("Year", "State.Code"),
       by.y = c("year", "stabbr")) -> test_data
-test_data[ , -c(113)] -> test_data #Removing duplicate column
+test_data[ , -c(113, 114)] -> test_data #Removing duplicate column
 
 
 cor(test_data$Total.Score, test_data$effort) #0.04445599
@@ -62,7 +66,7 @@ cor(test_data$Total.Score, test_data$inc_effort) #-0.08580547
 #This was already done on Feb 5, but now I'm updating it since we've merged data
 test_data %>%
   group_by(State.Code) %>%
-  summarize(State.Name = first(State.Name),
+  dplyr::summarize(State.Name = first(State.Name),
             Total.Math = weighted.mean(Total.Math, Total.Test.takers),
             Total.Verbal = weighted.mean(Total.Verbal, Total.Test.takers),
             Total.Score = Total.Math + Total.Verbal,
@@ -100,7 +104,7 @@ test_data %>%
 
 test_data %>%
   group_by(Year) %>%
-  summarize(Total.Math = weighted.mean(Total.Math, Total.Test.takers),
+  dplyr::summarize(Total.Math = weighted.mean(Total.Math, Total.Test.takers),
             Total.Verbal = weighted.mean(Total.Verbal, Total.Test.takers),
             Total.Score = Total.Math + Total.Verbal,
             Total.Test.takers = sum(Total.Test.takers),
@@ -145,7 +149,7 @@ cor(year$Total.Math, year$Total.Verbal) #0.9044226, not as good bc of small samp
 #Feb 8
 test_data %>%
   group_by(Year, region4) %>%
-  summarize(Total.Math = weighted.mean(Total.Math, Total.Test.takers),
+  dplyr::summarize(Total.Math = weighted.mean(Total.Math, Total.Test.takers),
             Total.Verbal = weighted.mean(Total.Verbal, Total.Test.takers),
             Total.Score = Total.Math + Total.Verbal,
             Total.Test.takers = sum(Total.Test.takers),
@@ -216,6 +220,7 @@ data.frame(Year = test_data$Year,
            State.Code = test_data$State.Code,
            State.Name = test_data$State.Name,
            Income = "Less than 20k",
+           Median.Inc = 10,
            Test.takers = test_data$Family.Income.Less.than.20k.Test.takers,
            Avg.Math = test_data$Family.Income.Less.than.20k.Math,
            Avg.Verbal = test_data$Family.Income.Less.than.20k.Verbal,
@@ -224,6 +229,7 @@ data.frame(Year = test_data$Year,
            State.Code = test_data$State.Code,
            State.Name = test_data$State.Name,
            Income = "Between 20k and 40k",
+           Median.Inc = 30,
            Test.takers = test_data$Family.Income.Between.20.40k.Test.takers,
            Avg.Math = test_data$Family.Income.Between.20.40k.Math,
            Avg.Verbal = test_data$Family.Income.Between.20.40k.Verbal,
@@ -232,6 +238,7 @@ data.frame(Year = test_data$Year,
            State.Code = test_data$State.Code,
            State.Name = test_data$State.Name,
            Income = "Between 40k and 60k",
+           Median.Inc = 50,
            Test.takers = test_data$Family.Income.Between.40.60k.Test.takers,
            Avg.Math = test_data$Family.Income.Between.40.60k.Math,
            Avg.Verbal = test_data$Family.Income.Between.40.60k.Verbal,
@@ -240,6 +247,7 @@ data.frame(Year = test_data$Year,
            State.Code = test_data$State.Code,
            State.Name = test_data$State.Name,
            Income = "Between 60k and 80k",
+           Median.Inc = 70,
            Test.takers = test_data$Family.Income.Between.60.80k.Test.takers,
            Avg.Math = test_data$Family.Income.Between.60.80k.Math,
            Avg.Verbal = test_data$Family.Income.Between.60.80k.Verbal,
@@ -248,6 +256,7 @@ data.frame(Year = test_data$Year,
            State.Code = test_data$State.Code,
            State.Name = test_data$State.Name,
            Income = "Between 80k and 100k",
+           Median.Inc = 90,
            Test.takers = test_data$Family.Income.Between.80.100k.Test.takers,
            Avg.Math = test_data$Family.Income.Between.80.100k.Math,
            Avg.Verbal = test_data$Family.Income.Between.80.100k.Verbal,
@@ -256,6 +265,7 @@ data.frame(Year = test_data$Year,
            State.Code = test_data$State.Code,
            State.Name = test_data$State.Name,
            Income = "More than 100k",
+           Median.Inc = 110,
            Test.takers = test_data$Family.Income.More.than.100k.Test.takers,
            Avg.Math = test_data$Family.Income.More.than.100k.Math,
            Avg.Verbal = test_data$Family.Income.More.than.100k.Verbal,
@@ -281,3 +291,86 @@ ggplot(Scores.by.Income, aes(x = Income, y = Total.Score)) + geom_boxplot() +
   labs(x = "Income Range", y = "Avg Score")
 #There is a slight difference between the median scores based on income bracket, even with removing the observations with small samples
 #The lowest income bracket has the highest variance
+
+#Outliers: 2014 DC, 2007 IL, 2008 IA, 2008 MN
+
+
+#Feb 19 (after adding avg income to SID data)
+
+test_data %>% filter(Year >= 2009 & State.Code != "HI") -> funding_data
+#Funding data is only available after 2009 and not in Hawaii
+
+#Test scores by year
+ggplot(funding_data, aes(x = Year, y = Total.Score, color = region4)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  facet_wrap( ~ State.Name, nrow = 5) +
+  labs(y = "Avg Test Score") +
+  theme(legend.position = "none")
+
+
+
+##FUNDING GAP ANALYSIS
+
+#Funding gap by year
+ggplot(funding_data, aes(x = Year, y = necm_fundinggap_state, color = region4)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  facet_wrap( ~ State.Name, nrow = 5) +
+  labs(y = "Funding Gap between Predicted and Actual Spending") +
+  theme(legend.position = "none")
+
+#Finding slopes of funding gap per year by state
+funding_models <- dlply(funding_data, "State.Name", function(df) 
+  lm(necm_fundinggap_state ~ Year, data = df))
+
+ldply(funding_models, coef) -> state_funding_lm
+
+#Finding slopes of test scores per year by state
+test_models <- dlply(funding_data, "State.Name", function(df) 
+  lm(Total.Score ~ Year, data = df))
+
+ldply(test_models, coef) -> state_test_lm
+
+cor(state_funding_lm$Year, state_test_lm$Year)
+#Correlation between the average year-to-year differences of funding gap and test scores: 0.03259532
+
+
+##ACTUAL SPENDING ANALYSIS
+
+#Actual spending by year
+ggplot(funding_data, aes(x = Year, y = necm_ppcstot_state, color = region4)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  facet_wrap( ~ State.Name, nrow = 5) +
+  labs(y = "Actual Spending") +
+  theme(legend.position = "none")
+
+#Finding slopes of spending per year by state
+spending_models <- dlply(funding_data, "State.Name", function(df) 
+  lm(necm_ppcstot_state ~ Year, data = df))
+
+ldply(spending_models, coef) -> state_spending_lm
+
+cor(state_spending_lm$Year, state_test_lm$Year)
+#Correlation between the average year-to-year differences of actual spending and test scores: 0.01567433
+
+cor(state_spending_lm$Year, state_funding_lm$Year)
+#Correlation between the average year-to-year differences of funding gap and actual spending: 0.7837172
+#Finally, a decent correlation coefficient, except it makes sense why...
+
+#Might be preferential to use spending rather than the gap
+
+data_comp <- data.frame(State.Name = state_funding_lm$State.Name,
+                        funding = state_funding_lm$Year,
+                        spending = state_spending_lm$Year,
+                        scores = state_test_lm$Year)
+
+ggplot(data_comp_idaho, aes(spending, scores)) + geom_point()
+
+data_comp %>% filter(State.Name != "Idaho") -> data_comp_idaho
+#States with a lot of spending tend to have a decrease in scores
+
+cor(data_comp$spending, data_comp$scores) #0.01567433
+cor(data_comp_idaho$spending, data_comp_idaho$scores) #-0.1653665
+
