@@ -339,11 +339,12 @@ cor(state_funding_lm$Year, state_test_lm$Year)
 ##ACTUAL SPENDING ANALYSIS
 
 #Actual spending by year
-ggplot(funding_data, aes(x = Year, y = necm_ppcstot_state, color = region4)) +
+ggplot(funding_data, aes(x = Year, y = necm_ppcstot_state/1000, color = region4)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE) +
   facet_wrap( ~ State.Name, nrow = 5) +
-  labs(y = "Actual Spending") +
+  labs(y = "Actual Spending (in $1000s)") +
+  ggtitle("U.S. Educational Spending by State (2009-2015)") +
   theme(legend.position = "none")
 
 #Finding slopes of spending per year by state
@@ -374,3 +375,4 @@ data_comp %>% filter(State.Name != "Idaho") -> data_comp_idaho
 cor(data_comp$spending, data_comp$scores) #0.01567433
 cor(data_comp_idaho$spending, data_comp_idaho$scores) #-0.1653665
 
+cor(funding_data$Total.Score, funding_data$necm_ppcstot_state) #-0.3162577????
