@@ -1,0 +1,9 @@
+John Incantalupo
+Week of 1/30 Summary
+
+Since I already did a summary from 1/30's class, this summary will only contain things that I did after that through 2/6's class. I will try to get future summaries out before Tuesday's classes.
+
+
+After looking through the two datasets, I began to determine which variables would be useful for my project. As there are 221 total variables between the two datasets, with some being the ratio between two other variables, it was important for me to narrow my focus onto a particular aspect of the data. I selected a few variables, such as the difference between how much a state is expected to spend on education and how much a state actually spent on education, the state's fiscal effort as a % of personal income, and the several variables that highlight the average salary for a teacher at a particular age. Then, I examined these variables to determine if there were any NAs. Turns out, we were completely missing data from West Virginia from 2005-2006, so I decided to shrink the time period to 2007-2015.
+
+Then, I started to work with the dataset using R. I first found that each state's average math score had a high correlation of 0.9786387 with each state's average verbal score, which makes sense. I also added a variable that is the total score didn't the dataset does not include that. After filtering out the observations that were outside our range of the 50 states plus DC between 2007-2015, I merged the two datasets to create one massive dataset that I will be mainly working off of for this project. I was then curious to find out how variables such as the test scores varied from year to year or from state to state as a whole. So, I created two new data frames that grouped observations by year and by state. I found that SAT scores were on a small yet noticeable decrease from year to year during this time period. This is definitely something I want to monitor going forward.

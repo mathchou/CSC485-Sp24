@@ -1,0 +1,7 @@
+John Incantalupo
+Week of 2/13 Summary
+
+Due to the different ways that the two datasets grouped income brackets, I realized that I would not be able to compare test scores to educational spending within each income bracket. I had to settle with comparing statewide spending and test scores, which may not account for specific districts with extremely high or low poverty percentages.
+
+In order to use the statewide spending data, I had to further filter out the data by only including the years 2009-2015 as well as excluding Hawaii. I analyzed each state's average year-to-year difference in funding gap, which is the difference between the state's actual spending and their expected spending needed to achieve the national average in test scores, by using linear regression. I then did the same process except with both total test scores and actual spending, and compared each state's year-to-year difference between the funding gap and test scores. I found no correlation between the two slopes, with a 0.03259532 coefficient. I also figured that actual spending would be a better variable to measure, as the fact that it is measured per pupil removes the bias from states with larger populations that have larger budgets as a result. The correlation between actual spending and test scores was somehow worse, with a 0.01567433 coefficient.
+

@@ -1,0 +1,10 @@
+John Incantalupo
+Week of 2/6 Summary
+
+On Thursday's class, I began by creating normalized test scores for each state-year combination. Originally, I planned to calculate these scores based on the mean and standard deviation of the test scores for that particular year. Due to the fact that I don't have access to each individual scores, I can't get an accurate standard deviation for each year's data, so I tried simply normalizing the data as a percentage of the mean scores from each year.
+
+Next, I created a line chart that showed yearly differences for both math and verbal scores based on region. What I found was that the Midwest was by far the highest performing region of the four, with their average score peaking in 2010 with 1138.50. Not only is this an outlier among the regions, but it's also an outlier for the region itself, as its next best year came in 2007 with an average score of 1088.21.
+
+I wanted to take a closer look at the 2010 Midwest data, but I wanted to quickly check to see if the sample size could have played an effect. Turns out, the 2010 Midwest region had the least number of test takers out of any region in any year with just over 63,000. The 2015 South, on the other hand, had nearly 10 times as many test takers, and had the lowest average score in the dataset. In fact, when grouped by region and year, the total score and the total number of test takers had a correlation of about -0.958, which is nearly a perfect negative correlation.
+
+Pivoting, I began to sort the data by the income brackets laid out by the SAT scores dataset. One issue that I found between the two datasets is that they sort the income brackets in two very different ways. The SAT scores datasets partitions families every $20,000/year, while the School Finance Indicator Database groups families into quintiles, meaning that the income ranges differ from state to state and from year to year. This is a problem that I may have to address sooner rather than later.
