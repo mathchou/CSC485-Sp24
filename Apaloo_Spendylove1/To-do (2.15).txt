@@ -1,0 +1,24 @@
+Here is a sample weekly update/planner as a markdown (md) file. Markdown is a useful file type to be familiar with because Jupyter nodebooks have their text components in markdown. [Here](https://www.markdownguide.org/basic-syntax/) is a website with all of the common formatting rules. [Here](https://www.markdownguide.org/cheat-sheet/) is a cheat sheet which is more compact.
+
+---
+
+## 1/23/2024
+
+Goals for this week:
+
+- [X] Change topic to Movie Recomendation project  
+- [X] Combine data sets 
+- [ ] Start EDA
+
+
+#### Reflections:
+
+I was having trouble getting my previous data set to fulfil the goal of project profile. I explored Kaggle for datasets, when I found two data sets that can be used for a movie recomendation project. 
+
+I was able to downlaod and clean the data and select the variables I wanted for my project 
+
+I will be working on doing some exploratory data analysis this week.
+---
+
+
+In the weekly reflection, I address how I met or didn't meet my goals last week. I give ~~excusses~~ reasons why I had trouble with meeting the goals I missed, and a plan on ideas to address it moving forward for next week. In general, the reflections don't need to be longer than a few sentences on each bullet point. Notice that for the task I completed with deliverables, I uploaded the product to github (and Canvas). You should do the same when delivering on code/images/graphs/data sets. Beware that github blocks files larger than 100MiB, so be careful uploading large data sets. You can see for instance, that I do *not* have the class data sets posted here, they are uploaded to Canvas for the larger file storage limit. You can upload larger files to your OneDrive account to share with me if needed.
