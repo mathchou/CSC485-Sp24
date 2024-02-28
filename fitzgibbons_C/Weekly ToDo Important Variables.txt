@@ -1,0 +1,17 @@
+Variables to test for in Project//Weekly ToDo
+
+Variables within Spotify:
+
+- Starting column (number of entry)
+- Popularity (!)
+- Danceability
+- Positiveness
+- Energy
+- Accousticness
+
+ToDo:
+
+-[ ] Continue with K-Means Clustering
+-[ ] Plot K-Means Clustering
+-[ ] Show other Plots with variables (significant)
+-[ ] Start on prediction model (try others based off of last project)
