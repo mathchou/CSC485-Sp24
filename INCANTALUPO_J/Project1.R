@@ -1,5 +1,8 @@
 library(tidyverse)
 library(plyr)
+library(ggfortify) #autoplot only
+library(cluster) #clustering only
+library(factoextra) #more clustering only
 
 #Feb 1
 school_scores <- read.csv("school_scores.csv")
@@ -48,13 +51,13 @@ school_scores %>%
   filter(State.Code != "PR" & State.Code != "VI") %>%
   filter(Year >= 2007) -> school_scores #Due to incomplete data for Puerto Rico and the Virgin Islands
 
-SID %>% filter(year >= 2007 & year <= 2015) -> SID07
+SID %>% filter(year >= 2007 & year <= 2015) -> SID
 
 #Merge the two datasets
-merge(school_scores, SID07,
+merge(school_scores, SID,
       by.x = c("Year", "State.Code"),
       by.y = c("year", "stabbr")) -> test_data
-test_data[ , -c(113, 114)] -> test_data #Removing duplicate column
+test_data[ , -c(113, 114)] -> test_data #Removing duplicate columns
 
 
 cor(test_data$Total.Score, test_data$effort) #0.04445599
@@ -73,10 +76,6 @@ test_data %>%
             Total.Test.takers = sum(Total.Test.takers),
             effort = mean(effort),
             inc_effort = mean(inc_effort),
-            #avg_predcost_state = mean(necm_predcost_state),
-            #avg_ppcstot_state = mean(necm_ppcstot_state),
-            #avg_outcomegap_state = mean(necm_outcomegap_state),
-            #avg_fundinggap_state = mean(necm_fundinggap_state),
             Test.takers.20k = sum(Family.Income.Less.than.20k.Test.takers),
             Pct.under.20k = Test.takers.20k / Total.Test.takers,
             Total.Score.20k = weighted.mean(Total.Score.20k,
@@ -110,10 +109,6 @@ test_data %>%
             Total.Test.takers = sum(Total.Test.takers),
             effort = mean(effort),
             inc_effort = mean(inc_effort),
-            #avg_predcost_state = mean(necm_predcost_state),
-            #avg_ppcstot_state = mean(necm_ppcstot_state),
-            #avg_outcomegap_state = mean(necm_outcomegap_state),
-            #avg_fundinggap_state = mean(necm_fundinggap_state),
             Test.takers.20k = sum(Family.Income.Less.than.20k.Test.takers),
             Pct.under.20k = Test.takers.20k / Total.Test.takers,
             Total.Score.20k = weighted.mean(Total.Score.20k,
@@ -155,10 +150,6 @@ test_data %>%
             Total.Test.takers = sum(Total.Test.takers),
             effort = mean(effort),
             inc_effort = mean(inc_effort),
-            #avg_predcost_state = mean(necm_predcost_state),
-            #avg_ppcstot_state = mean(necm_ppcstot_state),
-            #avg_outcomegap_state = mean(necm_outcomegap_state),
-            #avg_fundinggap_state = mean(necm_fundinggap_state),
             Test.takers.20k = sum(Family.Income.Less.than.20k.Test.takers),
             Pct.under.20k = Test.takers.20k / Total.Test.takers,
             Total.Score.20k = weighted.mean(Total.Score.20k,
@@ -207,6 +198,7 @@ ggplot(region_year, aes(x = Total.Test.takers/1000, y = Total.Score, color = reg
   geom_point() + ggtitle("Average SAT Score by US Region from 2007-2015") +
   labs(x = "# of Test Takers (in thousands)", y = "Avg Score", color = "Region")
 #...probably because of smaller sample size
+
 cor(region_year$Total.Score, region_year$Total.Test.takers) #-0.9583586, negatively strong!
 cor(region_year$Total.Score, region_year$Test.takers.100k) #-0.6819052, still negative
 cor(region_year$Total.Score, region_year$Pct.under.20k) #-0.1714971
@@ -300,6 +292,15 @@ ggplot(Scores.by.Income, aes(x = Income, y = Total.Score)) + geom_boxplot() +
 test_data %>% filter(Year >= 2009 & State.Code != "HI") -> funding_data
 #Funding data is only available after 2009 and not in Hawaii
 
+#Inflation correction
+funding_data %>%
+  mutate(predcost_state_inf = necm_predcost_state / ((1.0167)^(Year - 2009)),
+         ppcstot_state_inf = necm_ppcstot_state / ((1.0167)^(Year - 2009)),
+         fundinggap_state_inf = necm_fundinggap_state / ((1.0167)^(Year - 2009)),
+         predcost_q1_inf = necm_predcost_q1 / ((1.0167)^(Year - 2009)),
+         ppcstot_q1_inf = necm_ppcstot_q1 / ((1.0167)^(Year - 2009)),
+         fundinggap_q1_inf = necm_fundinggap_q1 / ((1.0167)^(Year - 2009))) -> funding_data
+
 #Test scores by year
 ggplot(funding_data, aes(x = Year, y = Total.Score, color = region4)) +
   geom_point() +
@@ -308,6 +309,11 @@ ggplot(funding_data, aes(x = Year, y = Total.Score, color = region4)) +
   labs(y = "Avg Test Score") +
   theme(legend.position = "none")
 
+#Finding slopes of test scores per year by state
+test_models <- dlply(funding_data, "State.Name", function(df) 
+  lm(Total.Score ~ Year, data = df))
+
+ldply(test_models, coef) -> state_test_lm
 
 
 ##FUNDING GAP ANALYSIS
@@ -326,15 +332,8 @@ funding_models <- dlply(funding_data, "State.Name", function(df)
 
 ldply(funding_models, coef) -> state_funding_lm
 
-#Finding slopes of test scores per year by state
-test_models <- dlply(funding_data, "State.Name", function(df) 
-  lm(Total.Score ~ Year, data = df))
-
-ldply(test_models, coef) -> state_test_lm
-
 cor(state_funding_lm$Year, state_test_lm$Year)
 #Correlation between the average year-to-year differences of funding gap and test scores: 0.03259532
-
 
 ##ACTUAL SPENDING ANALYSIS
 
@@ -362,12 +361,41 @@ cor(state_spending_lm$Year, state_funding_lm$Year)
 
 #Might be preferential to use spending rather than the gap
 
+cor(funding_data$Total.Score, funding_data$necm_ppcstot_state) #-0.3162577????
+
+ggplot(funding_data, aes(Total.Score, necm_ppcstot_state)) + geom_point()
+
+
+#Feb 22
+
+## SPENDING ANALYSIS WITH INFLATION
+
+#Actual spending by year
+ggplot(funding_data, aes(x = Year, y = ppcstot_state_inf/1000, color = region4)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  facet_wrap( ~ State.Name, nrow = 5) +
+  labs(y = "Actual Spending Adjusted for Inflation (in $1000s)") +
+  ggtitle("U.S. Educational Spending by State (2009-2015)") +
+  theme(legend.position = "none")
+
+#Finding slopes of spending per year by state
+spending_models_inf <- dlply(funding_data, "State.Name", function(df) 
+  lm(ppcstot_state_inf ~ Year, data = df))
+
+ldply(spending_models_inf, coef) -> state_spending_inf_lm
+
+cor(state_spending_inf_lm$Year, state_test_lm$Year)
+cor(state_spending_inf_lm$Year, state_spending_lm$Year)
+
+#Comparing slopes
 data_comp <- data.frame(State.Name = state_funding_lm$State.Name,
                         funding = state_funding_lm$Year,
                         spending = state_spending_lm$Year,
+                        spending_inf = state_spending_inf_lm$Year,
                         scores = state_test_lm$Year)
 
-ggplot(data_comp_idaho, aes(spending, scores)) + geom_point()
+ggplot(data_comp, aes(spending, spending_inf)) + geom_point()
 
 data_comp %>% filter(State.Name != "Idaho") -> data_comp_idaho
 #States with a lot of spending tend to have a decrease in scores
@@ -375,4 +403,134 @@ data_comp %>% filter(State.Name != "Idaho") -> data_comp_idaho
 cor(data_comp$spending, data_comp$scores) #0.01567433
 cor(data_comp_idaho$spending, data_comp_idaho$scores) #-0.1653665
 
-cor(funding_data$Total.Score, funding_data$necm_ppcstot_state) #-0.3162577????
+cor(data_comp$spending_inf, data_comp$scores) #0.01309443
+cor(data_comp_idaho$spending_inf, data_comp_idaho$scores) #-0.1445576
+
+
+## ACTUAL SPENDING VS TEST SCORES ANALYSIS
+
+ggplot(funding_data, aes(x = ppcstot_state_inf/1000,
+                         y = Total.Score,
+                         color = region4)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  facet_wrap( ~ State.Name, nrow = 5) +
+  labs(x = "Actual Spending Adjusted for Inflation (in $1000s)",
+       y = "Average SAT Score") +
+  ggtitle("U.S. Educational Spending by State (2009-2015)") +
+  theme(legend.position = "none")
+#It's all over the place
+
+#Finding correlations of spending vs test scores by state (also with variance)
+funding_data %>%
+  group_by(State.Name) %>%
+  dplyr::summarize(var_spend = var(ppcstot_state_inf),
+                   var_test = var(Total.Score),
+                   cor = cor(ppcstot_state_inf, Total.Score)) -> state_cor
+
+
+#Finding slopes of spending per year by state
+spending_test <- dlply(funding_data, "State.Name", function(df) 
+  lm(Total.Score ~ ppcstot_state_inf, data = df))
+
+ldply(spending_test, coef) -> spending_test_lm
+
+state_cor %>%
+  mutate(slope = spending_test_lm$ppcstot_state_inf*100) -> state_cor
+
+cor(state_cor$var_spend, state_cor$var_test) #0.0632282
+
+## Models
+
+funding_data$State.Name <- factor(funding_data$State.Name)
+
+m <- lm(Total.Score ~ Year + State.Name + necm_ppcstot_state, data = funding_data)
+summary(m)
+
+observed_fitted1 <- data.frame(Observed = funding_data$Total.Score,
+                               Fitted = predict(m))
+
+cor(observed_fitted1$Observed, observed_fitted1$Fitted)
+
+ggplot(observed_fitted1, aes(Observed, Fitted)) + geom_point()
+
+autoplot(m1)
+
+###### WHICH STATES ARE MOST AFFECTED BY SPENDING AND RUN A CLUSTER ANALYSIS
+
+#The states with the 5 most positive and 5 most negative correlations
+high_cor <- c("AL", "SC", "MD", "NV", "NH")
+low_cor <- c("DE", "CT", "AZ", "MI", "OH")
+
+funding_data %>%
+  filter(State.Code %in% high_cor) -> pos_cor_data
+
+funding_data %>%
+  filter(State.Code %in% low_cor) -> neg_cor_data
+
+#Aggregate funding data for all states
+funding_data %>%
+  group_by(State.Code) %>%
+  dplyr::summarize(State.Name = first(State.Name),
+                   Total.Math = weighted.mean(Total.Math, Total.Test.takers),
+                   Total.Verbal = weighted.mean(Total.Verbal, Total.Test.takers),
+                   Total.Score = Total.Math + Total.Verbal,
+                   Total.Test.takers = sum(Total.Test.takers),
+                   effort = mean(effort),
+                   inc_effort = mean(inc_effort),
+                   avg_predcost_inf = weighted.mean(predcost_state_inf,
+                                                      necm_enroll_state),
+                   avg_ppcstot_inf = weighted.mean(ppcstot_state_inf,
+                                                     necm_enroll_state),
+                   total_enroll_state = sum(necm_enroll_state),
+                   avg_fundinggap_inf = avg_ppcstot_inf - avg_predcost_inf,
+                   avg_predcost_q1 = weighted.mean(predcost_q1_inf,
+                                                    necm_enroll_state),
+                   avg_ppcstot_q1 = weighted.mean(ppcstot_q1_inf,
+                                                   necm_enroll_q1),
+                   total_enroll_q1 = sum(necm_enroll_q1),
+                   avg_fundinggap_q1 = avg_ppcstot_q1 - avg_predcost_q1,
+                   avg_sal_parity25 = mean(tchsalary25_30) / mean(nontchsal25_30),
+                   avg_inc_approx = mean(Avg.Inc)) -> funding_state
+
+#5 states with the highest positive correlation
+funding_state %>%
+  filter(State.Code %in% high_cor) -> state_pos_cor
+
+#5 states with the highest negative correlation
+funding_state %>%
+  filter(State.Code %in% low_cor) -> state_neg_cor
+
+#Data frame with most extremes
+rbind(state_pos_cor, state_neg_cor) -> state_extreme_cor
+
+# Feb 25 (nothing special day)
+#### CLUSTERING
+
+funding_state[ , -c(1, 2)] -> funding_cluster
+rownames(funding_cluster) <- funding_state$State.Code
+
+funding_cluster %>%
+  agnes(metric = "manhattan", method = "complete") %>%
+  plot(which = 2)
+
+funding_cluster %>% diana() %>% plot(which = 2)
+
+#Copied from textbook
+funding_cluster %>%
+  hcut(k = 5, hc_func = "agnes",
+       hc_method = "average",
+       hc_metric = "euclidean") %>%
+  fviz_dend()
+
+funding_cluster %>% scale() %>% as.matrix() %>% heatmap(scale = "row")
+
+
+#Feb 27
+#Only looking at the high-low correlation states
+state_extreme_cor[ , -c(1, 2)] -> funding_cluster10
+rownames(funding_cluster10) <- state_extreme_cor$State.Code
+
+funding_cluster10 %>% scale() %>% as.matrix() %>%
+  heatmap(scale = "row", margins = c(8, 5), add.expr = abline(h = 5.5, lwd = 5),
+          main = "Heatmap of the 10 Highest Correlated States", Colv = NA)
