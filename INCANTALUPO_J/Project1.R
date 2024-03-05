@@ -1,6 +1,5 @@
 library(tidyverse)
 library(plyr)
-library(ggfortify) #autoplot only
 library(cluster) #clustering only
 library(factoextra) #more clustering only
 
@@ -14,12 +13,32 @@ SID <- read.csv("StateIndicatorsDatabase_2024.csv")
 
 #summary(school_scores)
 
-ggplot(school_scores, aes(Total.Math, Total.Verbal)) + geom_point()
-cor(school_scores$Total.Math, school_scores$Total.Verbal) #0.9786387
+#weighted.mean(school_scores$Total.Math, school_scores$Total.Test.takers) #511.286
+#weighted.mean(school_scores$Total.Verbal, school_scores$Total.Test.takers) #500.7743
 
-#Feb 5
+SID %>% filter(year >= 2007 & year <= 2015) -> SID
+
 school_scores %>%
+  filter(State.Code != "PR" & State.Code != "VI") %>%
+  filter(Year >= 2007) -> school_scores #Due to incomplete data for Puerto Rico and the Virgin Islands
+
+#Merge the two datasets
+merge(school_scores, SID,
+      by.x = c("Year", "State.Code"),
+      by.y = c("year", "stabbr")) -> test_data
+test_data[ , -c(100, 101)] -> test_data #Removing duplicate columns
+
+#Inflation correction and other variables
+test_data %>%
   mutate(Total.Score = Total.Math + Total.Verbal,
+         Avg.Inc = (inc_pubsch * coverage) + (inc_nonpubsch * (1 - coverage)),
+         q1_pct = necm_enroll_q1 / necm_enroll_state,
+         predcost_state_inf = necm_predcost_state / ((1.0167)^(Year - 2009)),
+         ppcstot_state_inf = necm_ppcstot_state / ((1.0167)^(Year - 2009)),
+         fundinggap_state_inf = necm_fundinggap_state / ((1.0167)^(Year - 2009)),
+         predcost_q1_inf = necm_predcost_q1 / ((1.0167)^(Year - 2009)),
+         ppcstot_q1_inf = necm_ppcstot_q1 / ((1.0167)^(Year - 2009)),
+         fundinggap_q1_inf = necm_fundinggap_q1 / ((1.0167)^(Year - 2009)),
          Total.Score.20k = Family.Income.Less.than.20k.Math +
            Family.Income.Less.than.20k.Verbal,
          Total.Score.20.40k = Family.Income.Between.20.40k.Math +
@@ -37,70 +56,51 @@ school_scores %>%
          Pct.40.60k = Family.Income.Between.40.60k.Test.takers / Total.Test.takers,
          Pct.60.80k = Family.Income.Between.60.80k.Test.takers / Total.Test.takers,
          Pct.80.100k = Family.Income.Between.80.100k.Test.takers / Total.Test.takers,
-         Pct.over.100k = Family.Income.More.than.100k.Test.takers / Total.Test.takers) -> school_scores
-
-weighted.mean(school_scores$Total.Math, school_scores$Total.Test.takers) #511.286
-weighted.mean(school_scores$Total.Verbal, school_scores$Total.Test.takers) #500.7743
-
-SID %>%
-  mutate(Avg.Inc = (inc_pubsch * coverage) + (inc_nonpubsch * (1 - coverage)),
-         q1_pct = necm_enroll_q1 / necm_enroll_state) -> SID
+         Pct.over.100k = Family.Income.More.than.100k.Test.takers / Total.Test.takers) -> test_data
 
 
-school_scores %>%
-  filter(State.Code != "PR" & State.Code != "VI") %>%
-  filter(Year >= 2007) -> school_scores #Due to incomplete data for Puerto Rico and the Virgin Islands
-
-SID %>% filter(year >= 2007 & year <= 2015) -> SID
-
-#Merge the two datasets
-merge(school_scores, SID,
-      by.x = c("Year", "State.Code"),
-      by.y = c("year", "stabbr")) -> test_data
-test_data[ , -c(113, 114)] -> test_data #Removing duplicate columns
-
-
-cor(test_data$Total.Score, test_data$effort) #0.04445599
-cor(test_data$Total.Score, test_data$inc_effort) #-0.08580547
+#cor(test_data$Total.Score, test_data$effort) #0.04445599
+#cor(test_data$Total.Score, test_data$inc_effort) #-0.08580547
 
 
 #Feb 6
-
+#REMOVE????
 #This was already done on Feb 5, but now I'm updating it since we've merged data
-test_data %>%
-  group_by(State.Code) %>%
-  dplyr::summarize(State.Name = first(State.Name),
-            Total.Math = weighted.mean(Total.Math, Total.Test.takers),
-            Total.Verbal = weighted.mean(Total.Verbal, Total.Test.takers),
-            Total.Score = Total.Math + Total.Verbal,
-            Total.Test.takers = sum(Total.Test.takers),
-            effort = mean(effort),
-            inc_effort = mean(inc_effort),
-            Test.takers.20k = sum(Family.Income.Less.than.20k.Test.takers),
-            Pct.under.20k = Test.takers.20k / Total.Test.takers,
-            Total.Score.20k = weighted.mean(Total.Score.20k,
-                                            Family.Income.Less.than.20k.Test.takers),
-            Test.takers.20.40k = sum(Family.Income.Between.20.40k.Test.takers),
-            Pct.20.40k = Test.takers.20.40k / Total.Test.takers,
-            Total.Score.20.40k = weighted.mean(Total.Score.20.40k,
-                                               Family.Income.Between.20.40k.Test.takers),
-            Test.takers.40.60k = sum(Family.Income.Between.40.60k.Test.takers),
-            Pct.40.60k = Test.takers.40.60k / Total.Test.takers,
-            Total.Score.40.60k = weighted.mean(Total.Score.40.60k,
-                                               Family.Income.Between.40.60k.Test.takers),
-            Test.takers.60.80k = sum(Family.Income.Between.60.80k.Test.takers),
-            Pct.60.80k = Test.takers.60.80k / Total.Test.takers,
-            Total.Score.60.80k = weighted.mean(Total.Score.60.80k,
-                                               Family.Income.Between.60.80k.Test.takers),
-            Test.takers.80.100k = sum(Family.Income.Between.80.100k.Test.takers),
-            Pct.80.100k = Test.takers.80.100k / Total.Test.takers,
-            Total.Score.80.100k = weighted.mean(Total.Score.80.100k,
-                                                Family.Income.Between.80.100k.Test.takers),
-            Test.takers.100k = sum(Family.Income.More.than.100k.Test.takers),
-            Pct.over.100k = Test.takers.100k / Total.Test.takers,
-            Total.Score.100k = weighted.mean(Total.Score.100k,
-                                             Family.Income.More.than.100k.Test.takers)) -> state
+#test_data %>%
+#  group_by(State.Code) %>%
+#  dplyr::summarize(State.Name = first(State.Name),
+#            Total.Math = weighted.mean(Total.Math, Total.Test.takers),
+#            Total.Verbal = weighted.mean(Total.Verbal, Total.Test.takers),
+#            Total.Score = Total.Math + Total.Verbal,
+#            Total.Test.takers = sum(Total.Test.takers),
+#            effort = mean(effort),
+#            inc_effort = mean(inc_effort),
+#            Test.takers.20k = sum(Family.Income.Less.than.20k.Test.takers),
+#            Pct.under.20k = Test.takers.20k / Total.Test.takers,
+#            Total.Score.20k = weighted.mean(Total.Score.20k,
+#                                            Family.Income.Less.than.20k.Test.takers),
+#            Test.takers.20.40k = sum(Family.Income.Between.20.40k.Test.takers),
+#            Pct.20.40k = Test.takers.20.40k / Total.Test.takers,
+#            Total.Score.20.40k = weighted.mean(Total.Score.20.40k,
+#                                               Family.Income.Between.20.40k.Test.takers),
+#            Test.takers.40.60k = sum(Family.Income.Between.40.60k.Test.takers),
+#            Pct.40.60k = Test.takers.40.60k / Total.Test.takers,
+#            Total.Score.40.60k = weighted.mean(Total.Score.40.60k,
+#                                               Family.Income.Between.40.60k.Test.takers),
+#            Test.takers.60.80k = sum(Family.Income.Between.60.80k.Test.takers),
+#            Pct.60.80k = Test.takers.60.80k / Total.Test.takers,
+#            Total.Score.60.80k = weighted.mean(Total.Score.60.80k,
+#                                               Family.Income.Between.60.80k.Test.takers),
+#            Test.takers.80.100k = sum(Family.Income.Between.80.100k.Test.takers),
+#            Pct.80.100k = Test.takers.80.100k / Total.Test.takers,
+#            Total.Score.80.100k = weighted.mean(Total.Score.80.100k,
+#                                                Family.Income.Between.80.100k.Test.takers),
+#            Test.takers.100k = sum(Family.Income.More.than.100k.Test.takers),
+#            Pct.over.100k = Test.takers.100k / Total.Test.takers,
+#            Total.Score.100k = weighted.mean(Total.Score.100k,
+#                                             Family.Income.More.than.100k.Test.takers)) -> state
 
+#REMOVED DATA???
 test_data %>%
   group_by(Year) %>%
   dplyr::summarize(Total.Math = weighted.mean(Total.Math, Total.Test.takers),
@@ -108,40 +108,17 @@ test_data %>%
             Total.Score = Total.Math + Total.Verbal,
             Total.Test.takers = sum(Total.Test.takers),
             effort = mean(effort),
-            inc_effort = mean(inc_effort),
-            Test.takers.20k = sum(Family.Income.Less.than.20k.Test.takers),
-            Pct.under.20k = Test.takers.20k / Total.Test.takers,
-            Total.Score.20k = weighted.mean(Total.Score.20k,
-                                            Family.Income.Less.than.20k.Test.takers),
-            Test.takers.20.40k = sum(Family.Income.Between.20.40k.Test.takers),
-            Pct.20.40k = Test.takers.20.40k / Total.Test.takers,
-            Total.Score.20.40k = weighted.mean(Total.Score.20.40k,
-                                               Family.Income.Between.20.40k.Test.takers),
-            Test.takers.40.60k = sum(Family.Income.Between.40.60k.Test.takers),
-            Pct.40.60k = Test.takers.40.60k / Total.Test.takers,
-            Total.Score.40.60k = weighted.mean(Total.Score.40.60k,
-                                               Family.Income.Between.40.60k.Test.takers),
-            Test.takers.60.80k = sum(Family.Income.Between.60.80k.Test.takers),
-            Pct.60.80k = Test.takers.60.80k / Total.Test.takers,
-            Total.Score.60.80k = weighted.mean(Total.Score.60.80k,
-                                               Family.Income.Between.60.80k.Test.takers),
-            Test.takers.80.100k = sum(Family.Income.Between.80.100k.Test.takers),
-            Pct.80.100k = Test.takers.80.100k / Total.Test.takers,
-            Total.Score.80.100k = weighted.mean(Total.Score.80.100k,
-                                                Family.Income.Between.80.100k.Test.takers),
-            Test.takers.100k = sum(Family.Income.More.than.100k.Test.takers),
-            Pct.over.100k = Test.takers.100k / Total.Test.takers,
-            Total.Score.100k = weighted.mean(Total.Score.100k,
-                                             Family.Income.More.than.100k.Test.takers)) -> year
+            inc_effort = mean(inc_effort)) -> year
 
-ggplot(state, aes(Total.Math, Total.Verbal)) + geom_point()
-cor(state$Total.Math, state$Total.Verbal) #0.9815697
-
-ggplot(year, aes(Total.Math, Total.Verbal)) + geom_point()
-cor(year$Total.Math, year$Total.Verbal) #0.9044226, not as good bc of small sample
-
+#Plot for beginning of presentation
+ggplot(year, aes(Year)) +
+  geom_line(aes(y = Total.Math, color = "Math")) +
+  geom_line(aes(y = Total.Verbal, color = "Verbal")) +
+  ggtitle("Average U.S. SAT Scores by Year (2005-2015)") +
+  labs(y = "Avg Section Score", color = "Section") + ylim(495, 515)
 
 #Feb 8
+#REMOVED DATA???
 test_data %>%
   group_by(Year, region4) %>%
   dplyr::summarize(Total.Math = weighted.mean(Total.Math, Total.Test.takers),
@@ -149,41 +126,17 @@ test_data %>%
             Total.Score = Total.Math + Total.Verbal,
             Total.Test.takers = sum(Total.Test.takers),
             effort = mean(effort),
-            inc_effort = mean(inc_effort),
-            Test.takers.20k = sum(Family.Income.Less.than.20k.Test.takers),
-            Pct.under.20k = Test.takers.20k / Total.Test.takers,
-            Total.Score.20k = weighted.mean(Total.Score.20k,
-                                            Family.Income.Less.than.20k.Test.takers),
-            Test.takers.20.40k = sum(Family.Income.Between.20.40k.Test.takers),
-            Pct.20.40k = Test.takers.20.40k / Total.Test.takers,
-            Total.Score.20.40k = weighted.mean(Total.Score.20.40k,
-                                               Family.Income.Between.20.40k.Test.takers),
-            Test.takers.40.60k = sum(Family.Income.Between.40.60k.Test.takers),
-            Pct.40.60k = Test.takers.40.60k / Total.Test.takers,
-            Total.Score.40.60k = weighted.mean(Total.Score.40.60k,
-                                               Family.Income.Between.40.60k.Test.takers),
-            Test.takers.60.80k = sum(Family.Income.Between.60.80k.Test.takers),
-            Pct.60.80k = Test.takers.60.80k / Total.Test.takers,
-            Total.Score.60.80k = weighted.mean(Total.Score.60.80k,
-                                               Family.Income.Between.60.80k.Test.takers),
-            Test.takers.80.100k = sum(Family.Income.Between.80.100k.Test.takers),
-            Pct.80.100k = Test.takers.80.100k / Total.Test.takers,
-            Total.Score.80.100k = weighted.mean(Total.Score.80.100k,
-                                                Family.Income.Between.80.100k.Test.takers),
-            Test.takers.100k = sum(Family.Income.More.than.100k.Test.takers),
-            Pct.over.100k = Test.takers.100k / Total.Test.takers,
-            Total.Score.100k = weighted.mean(Total.Score.100k,
-                                             Family.Income.More.than.100k.Test.takers)) -> region_year
+            inc_effort = mean(inc_effort)) -> region_year
 
 #Normalized test scores by year
-test_data %>%
-  mutate(norm.math = NA, norm.verbal = NA, norm.total = NA) -> test_data
+#test_data %>%
+#  mutate(norm.math = NA, norm.verbal = NA, norm.total = NA) -> test_data
 
-for (i in 1:nrow(test_data)) {
-  test_data$norm.math[i] <- test_data$Total.Math[i] / year$Total.Math[which(year$Year == test_data$Year[i])]
-  test_data$norm.verbal[i] <- test_data$Total.Verbal[i] / year$Total.Verbal[which(year$Year == test_data$Year[i])]
-  test_data$norm.total[i] <- test_data$Total.Score[i] / year$Total.Score[which(year$Year == test_data$Year[i])]
-}
+#for (i in 1:nrow(test_data)) {
+#  test_data$norm.math[i] <- test_data$Total.Math[i] / year$Total.Math[which(year$Year == test_data$Year[i])]
+#  test_data$norm.verbal[i] <- test_data$Total.Verbal[i] / year$Total.Verbal[which(year$Year == test_data$Year[i])]
+#  test_data$norm.total[i] <- test_data$Total.Score[i] / year$Total.Score[which(year$Year == test_data$Year[i])]
+#}
 
 
 #Feb 10
@@ -200,11 +153,6 @@ ggplot(region_year, aes(x = Total.Test.takers/1000, y = Total.Score, color = reg
 #...probably because of smaller sample size
 
 cor(region_year$Total.Score, region_year$Total.Test.takers) #-0.9583586, negatively strong!
-cor(region_year$Total.Score, region_year$Test.takers.100k) #-0.6819052, still negative
-cor(region_year$Total.Score, region_year$Pct.under.20k) #-0.1714971
-
-cor(test_data$Total.Score, test_data$Pct.under.20k) #-0.286964
-#Having a higher % of test takers from low income families does not directly affect SAT scores
 
 
 #Dividing into different income brackets
@@ -292,22 +240,12 @@ ggplot(Scores.by.Income, aes(x = Income, y = Total.Score)) + geom_boxplot() +
 test_data %>% filter(Year >= 2009 & State.Code != "HI") -> funding_data
 #Funding data is only available after 2009 and not in Hawaii
 
-#Inflation correction
-funding_data %>%
-  mutate(predcost_state_inf = necm_predcost_state / ((1.0167)^(Year - 2009)),
-         ppcstot_state_inf = necm_ppcstot_state / ((1.0167)^(Year - 2009)),
-         fundinggap_state_inf = necm_fundinggap_state / ((1.0167)^(Year - 2009)),
-         predcost_q1_inf = necm_predcost_q1 / ((1.0167)^(Year - 2009)),
-         ppcstot_q1_inf = necm_ppcstot_q1 / ((1.0167)^(Year - 2009)),
-         fundinggap_q1_inf = necm_fundinggap_q1 / ((1.0167)^(Year - 2009))) -> funding_data
-
 #Test scores by year
 ggplot(funding_data, aes(x = Year, y = Total.Score, color = region4)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE) +
   facet_wrap( ~ State.Name, nrow = 5) +
-  labs(y = "Avg Test Score") +
-  theme(legend.position = "none")
+  labs(y = "Avg Test Score", color = "Region")
 
 #Finding slopes of test scores per year by state
 test_models <- dlply(funding_data, "State.Name", function(df) 
@@ -395,7 +333,7 @@ data_comp <- data.frame(State.Name = state_funding_lm$State.Name,
                         spending_inf = state_spending_inf_lm$Year,
                         scores = state_test_lm$Year)
 
-ggplot(data_comp, aes(spending, spending_inf)) + geom_point()
+ggplot(data_comp, aes(scores, spending_inf)) + geom_point()
 
 data_comp %>% filter(State.Name != "Idaho") -> data_comp_idaho
 #States with a lot of spending tend to have a decrease in scores
@@ -417,7 +355,6 @@ ggplot(funding_data, aes(x = ppcstot_state_inf/1000,
   facet_wrap( ~ State.Name, nrow = 5) +
   labs(x = "Actual Spending Adjusted for Inflation (in $1000s)",
        y = "Average SAT Score") +
-  ggtitle("U.S. Educational Spending by State (2009-2015)") +
   theme(legend.position = "none")
 #It's all over the place
 
@@ -440,21 +377,6 @@ state_cor %>%
 
 cor(state_cor$var_spend, state_cor$var_test) #0.0632282
 
-## Models
-
-funding_data$State.Name <- factor(funding_data$State.Name)
-
-m <- lm(Total.Score ~ Year + State.Name + necm_ppcstot_state, data = funding_data)
-summary(m)
-
-observed_fitted1 <- data.frame(Observed = funding_data$Total.Score,
-                               Fitted = predict(m))
-
-cor(observed_fitted1$Observed, observed_fitted1$Fitted)
-
-ggplot(observed_fitted1, aes(Observed, Fitted)) + geom_point()
-
-autoplot(m1)
 
 ###### WHICH STATES ARE MOST AFFECTED BY SPENDING AND RUN A CLUSTER ANALYSIS
 
@@ -507,7 +429,7 @@ rbind(state_pos_cor, state_neg_cor) -> state_extreme_cor
 # Feb 25 (nothing special day)
 #### CLUSTERING
 
-funding_state[ , -c(1, 2)] -> funding_cluster
+funding_state[ , -c(1:4)] -> funding_cluster
 rownames(funding_cluster) <- funding_state$State.Code
 
 funding_cluster %>%
@@ -528,9 +450,27 @@ funding_cluster %>% scale() %>% as.matrix() %>% heatmap(scale = "row")
 
 #Feb 27
 #Only looking at the high-low correlation states
-state_extreme_cor[ , -c(1, 2)] -> funding_cluster10
+state_extreme_cor[ , -c(1:4)] -> funding_cluster10
 rownames(funding_cluster10) <- state_extreme_cor$State.Code
 
 funding_cluster10 %>% scale() %>% as.matrix() %>%
-  heatmap(scale = "row", margins = c(8, 5), add.expr = abline(h = 5.5, lwd = 5),
-          main = "Heatmap of the 10 Highest Correlated States", Colv = NA)
+  heatmap(scale = "row", margins = c(8, 5),
+          Colv = NA)
+
+
+#Feb 29
+funding_data %>%
+  group_by(Year) %>%
+  dplyr::summarize(necm_predcost_state = weighted.mean(necm_predcost_state,
+                                                       necm_enroll_state),
+                   necm_ppcstot_state = weighted.mean(necm_ppcstot_state,
+                                                      necm_enroll_state),
+                   predcost_state_inf = weighted.mean(predcost_state_inf,
+                                                      necm_enroll_state),
+                   ppcstot_state_inf = weighted.mean(ppcstot_state_inf,
+                                                     necm_enroll_state)) -> funding_year
+
+#Other plot for beginning of presentation
+ggplot(funding_year, aes(Year, necm_ppcstot_state)) + geom_line() +
+  labs(y = "Money Spent Per Pupil (USD)") +
+  ggtitle("U.S. Educational Spending (2009-2015)")
