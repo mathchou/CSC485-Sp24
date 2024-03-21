@@ -1,0 +1,9 @@
+Project #2 Proposal/Outline: A WAR-like Metric for NFL Punters
+
+In baseball, WAR, or wins above replacement, is a metric used to describe a player's all-encompassing value to the team, which measures the number of wins that the team won because they had that player on their team as opposed to any replacement-level player. Due to the positional variability in football, a similar metric to WAR would be near-impossible. I have thought about exploring a metric specifically for NFL punters. I would like to find a single number that describes a punter's value to his team as opposed to the average punter. To do this, I have a play-by-play dataset that contains data on every play that was run during the 2023 NFL regular season.
+
+By using exploratory data analysis, I can determine how starting field position has an effect on the outcome of a drive. Then, I can find how the resulting field position of each punt would compare to the starting field position of the average punt from that distance. Then, I can assign a numerical value of expected points above average for each punt, and then sum up those numbers for each punter.
+
+If time permits, I plan to incorporate other factors into this model, such as hangtime and snap-to-punt time. The original dataset that I found does not feature these variables, so I would need to find another dataset that has these variables in order to create a more in-depth model.
+
+I have also thought about broadening this topic to special teams in general, especially if I cannot find a supplementary dataset. In this case, I would measure the value of special teams to the team's performance as a whole, as opposed to comparing punters to other punters. In this case, I would need to take into account other factors such as punt returns, blocked kicks, and bad snaps, which I would need to find a supplementary dataset in order to obtain data on such factors.
